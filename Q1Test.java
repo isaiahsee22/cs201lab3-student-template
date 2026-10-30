@@ -62,8 +62,121 @@ public class Q1Test {
           System.out.println();
      } 
 
-      // write your codes here
-     public static String verify(String traversal1, String traversal2, String traversal3){
-          return "";
+     //write your codes here
+     public static String verify(String traversal1, String traversal2, String traversal3) {
+          String[] traversals = {traversal1, traversal2, traversal3};
+          String[] types = {"Inorder", "Preorder", "Postorder"};
+
+          String[] values = traversal1.split("-");
+
+          java.util.Set<String> set = new java.util.HashSet<>(
+               java.util.Arrays.asList(values)
+          );
+
+          if (set.size() != values.length) {
+               return "Invalid traversals";
+          }
+
+          for (String traversal : traversals) {
+               String[] current = traversal.split("-");
+
+               if (current.length != values.length ||
+                    !set.equals(new java.util.HashSet<>(
+                         java.util.Arrays.asList(current)))) {
+                    return "Invalid traversals";
+               }
+          }
+
+          //try all possible assignments
+          for (int i = 0; i < 3; i++) {
+               for (int j = 0; j < 3; j++) {
+                    for (int k = 0; k < 3; k++) {
+
+                         if (i == j || i == k || j == k) {
+                              continue;
+                         }
+
+                         //j represents preorder
+                         Node root = null;
+
+                         for (String value : traversals[j].split("-")) {
+                              root = insert(root, Integer.parseInt(value));
+                         }
+
+                         StringBuilder in = new StringBuilder();
+                         StringBuilder pre = new StringBuilder();
+                         StringBuilder post = new StringBuilder();
+
+                         inorder(root, in);
+                         preorder(root, pre);
+                         postorder(root, post);
+
+                         //compare each input with its corresponding traversal
+                         if (in.toString().equals(traversals[i]) &&
+                              pre.toString().equals(traversals[j]) &&
+                              post.toString().equals(traversals[k])) {
+
+                              return "Traversal 1 - " + types[i] + ", Traversal 2 - " + types[j] + ", Traversal 3 - " + types[k];
+                         }
+                    }
+               }
+          }
+          return "Invalid traversals";
+     }
+
+
+     static class Node {
+          int value;
+          Node left, right;
+
+          Node(int value) {
+               this.value = value;
+          }
+     }
+
+     static Node insert(Node root, int value) {
+          if (root == null) {
+               return new Node(value);
+          }
+
+          if (value < root.value) {
+               root.left = insert(root.left, value);
+          } else if (value > root.value) {
+               root.right = insert(root.right, value);
+          }
+
+          return root;
+     }
+
+     static void inorder(Node root, StringBuilder result) {
+          if (root == null) return;
+
+          inorder(root.left, result);
+          append(root.value, result);
+          inorder(root.right, result);
+     }
+
+     static void preorder(Node root, StringBuilder result) {
+          if (root == null) return;
+
+          append(root.value, result);
+          preorder(root.left, result);
+          preorder(root.right, result);
+     }
+
+     static void postorder(Node root, StringBuilder result) {
+          if (root == null) return;
+
+          postorder(root.left, result);
+          postorder(root.right, result);
+          append(root.value, result);
+     }
+
+     static void append(int value, StringBuilder result) {
+          if (result.length() > 0) {
+               result.append("-");
+          }
+
+          result.append(value);
      }
 }
