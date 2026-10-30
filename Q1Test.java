@@ -116,7 +116,13 @@ public class Q1Test {
                               pre.toString().equals(traversals[j]) &&
                               post.toString().equals(traversals[k])) {
 
-                              return "Traversal 1 - " + types[i] + ", Traversal 2 - " + types[j] + ", Traversal 3 - " + types[k];
+                              String[] labels = new String[3];
+
+                              labels[i] = "Inorder";
+                              labels[j] = "Preorder";
+                              labels[k] = "Postorder";
+
+                              return "Traversal 1 - " + labels[0] + ", Traversal 2 - " + labels[1] + ", Traversal 3 - " + labels[2];
                          }
                     }
                }
